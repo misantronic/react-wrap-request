@@ -1,0 +1,32 @@
+{
+    "name": "react-wrap-request",
+    "version": "1.0.0",
+    "description": "",
+    "main": "dist/index.js",
+    "scripts": {
+        "start": "tsc -p ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/misantronic/react-wrap-request.git"
+    },
+    "keywords": [
+        "react",
+        "wrap-request"
+    ],
+    "author": "David Schkalee",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/misantronic/react-wrap-request/issues"
+    },
+    "homepage": "https://github.com/misantronic/react-wrap-request#readme",
+    "peerDependencies": {
+        "react": "^16.9.0"
+    },
+    "devDependencies": {
+        "@types/react": "^16.9.0",
+        "react": "^16.9.0",
+        "tslib": "^1.10.0",
+        "typescript": "^3.5.3"
+    }
+}
