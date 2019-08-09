@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 
-export { WrapRequest };
+export { WrapRequestHook };
 
 interface RequestOptions {
     stateLoading?: boolean;
 }
 
-interface WrapRequest<T, TT, Y> {
+interface WrapRequestHook<T, TT, Y> {
     $: T;
     result: T;
     loading: boolean;
@@ -57,21 +57,21 @@ export function useWrapRequest<T, Y>(
         deps?: Y[];
         defaultData: T;
     }
-): WrapRequest<T, T, Y>;
+): WrapRequestHook<T, T, Y>;
 export function useWrapRequest<T, Y>(
     req: (...deps: Y[]) => Promise<T>,
     options?: {
         deps?: Y[];
         defaultData?: T;
     }
-): WrapRequest<T | undefined, T, Y>;
+): WrapRequestHook<T | undefined, T, Y>;
 export function useWrapRequest<T, Y>(
     req: (...deps: Y[]) => Promise<T>,
     options: {
         deps?: Y[];
         defaultData?: T;
     } = {}
-): WrapRequest<T, T, Y> {
+): WrapRequestHook<T, T, Y> {
     const [$, set$] = useState<T>(options.defaultData as any);
     const [state, setState] = useState<
         'loading' | 'fetched' | Error | undefined

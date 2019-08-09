@@ -1,8 +1,8 @@
-export { WrapRequest };
+export { WrapRequestHook };
 interface RequestOptions {
     stateLoading?: boolean;
 }
-interface WrapRequest<T, TT, Y> {
+interface WrapRequestHook<T, TT, Y> {
     $: T;
     result: T;
     loading: boolean;
@@ -23,8 +23,8 @@ interface Handlers<T> {
 export declare function useWrapRequest<T, Y>(req: (...deps: Y[]) => Promise<T>, options?: {
     deps?: Y[];
     defaultData: T;
-}): WrapRequest<T, T, Y>;
+}): WrapRequestHook<T, T, Y>;
 export declare function useWrapRequest<T, Y>(req: (...deps: Y[]) => Promise<T>, options?: {
     deps?: Y[];
     defaultData?: T;
-}): WrapRequest<T | undefined, T, Y>;
+}): WrapRequestHook<T | undefined, T, Y>;
