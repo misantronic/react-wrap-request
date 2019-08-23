@@ -6,7 +6,7 @@ interface RequestOptions {
     stateLoading?: boolean;
 }
 
-interface WrapRequestHook<T, TT, Y> {
+interface WrapRequestHook<T = any, TT = T, Y = undefined> {
     $: T;
     result: T;
     loading: boolean;
@@ -21,7 +21,7 @@ interface WrapRequestHook<T, TT, Y> {
 interface Handlers<T> {
     default?(): any;
     loading?(): any;
-    fetched?(...value: T[]): any;
+    fetched?(value: T): any;
     empty?(): any;
     error?(...e: Error[]): any;
 }
