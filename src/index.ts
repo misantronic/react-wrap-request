@@ -106,7 +106,7 @@ export function useWrapRequest<T, Y>(
 
             return undefined;
         },
-        [deps]
+        deps
     );
 
     const match = useCallback(

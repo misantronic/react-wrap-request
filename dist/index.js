@@ -63,7 +63,7 @@ export function useWrapRequest(req, options) {
                 case 4: return [2 /*return*/, undefined];
             }
         });
-    }); }, [deps]);
+    }); }, deps);
     var match = useCallback(function (handlers) {
         if (error && handlers.error) {
             return handlers.error(error);
