@@ -1,4 +1,4 @@
-import * as tslib_1 from "tslib";
+import { __awaiter, __generator, __read, __spread } from "tslib";
 import { useState, useCallback, useEffect } from 'react';
 /** @see https://stackoverflow.com/a/4994244/1138860 */
 function isEmpty(obj) {
@@ -27,17 +27,17 @@ function isEmpty(obj) {
 export function useWrapRequest(req, options) {
     var _this = this;
     if (options === void 0) { options = {}; }
-    var _a = tslib_1.__read(useState(options.defaultData), 2), $ = _a[0], set$ = _a[1];
-    var _b = tslib_1.__read(useState(), 2), state = _b[0], setState = _b[1];
+    var _a = __read(useState(options.defaultData), 2), $ = _a[0], set$ = _a[1];
+    var _b = __read(useState(), 2), state = _b[0], setState = _b[1];
     var loading = state === 'loading';
     var fetched = state === 'fetched';
     var error = state instanceof Error ? state : undefined;
     var empty = fetched && isEmpty($);
-    var deps = options.deps || [];
+    var deps = (options.deps || []);
     var mounted = true;
-    var request = useCallback(function (params, options) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
+    var request = useCallback(function (params, options) { return __awaiter(_this, void 0, void 0, function () {
         var res, e_1;
-        return tslib_1.__generator(this, function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (options === undefined || options.stateLoading === true) {
@@ -46,7 +46,9 @@ export function useWrapRequest(req, options) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, (params ? req(params) : req.apply(void 0, tslib_1.__spread(deps)))];
+                    return [4 /*yield*/, (params
+                            ? req(params)
+                            : req.apply(void 0, __spread(deps)))];
                 case 2:
                     res = _a.sent();
                     if (mounted) {
