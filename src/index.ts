@@ -6,6 +6,9 @@ interface RequestOptions {
     stateLoading?: boolean;
 }
 
+type State = 'loading' | 'fetched' | Error | undefined;
+type ToupleArray = ReadonlyArray<any> | readonly [any];
+
 interface WrapRequestHook<T = any, TT = T, Y = undefined> {
     $: T;
     result: T;
@@ -51,36 +54,34 @@ function isEmpty(obj: any): boolean {
     return true;
 }
 
-export function useWrapRequest<T, Y>(
-    req: (...deps: Y[]) => Promise<T>,
+export function useWrapRequest<T, Y extends ToupleArray>(
+    req: (...deps: Y) => Promise<T>,
     options?: {
-        deps?: Y[];
+        deps?: Y;
         defaultData: T;
     }
 ): WrapRequestHook<T, T, Y>;
-export function useWrapRequest<T, Y>(
-    req: (...deps: Y[]) => Promise<T>,
+export function useWrapRequest<T, Y extends ToupleArray>(
+    req: (...deps: Y) => Promise<T>,
     options?: {
-        deps?: Y[];
+        deps?: Y;
         defaultData?: T;
     }
 ): WrapRequestHook<T | undefined, T, Y>;
-export function useWrapRequest<T, Y>(
-    req: (...deps: Y[]) => Promise<T>,
+export function useWrapRequest<T, Y extends ToupleArray>(
+    req: (...deps: Y) => Promise<T>,
     options: {
-        deps?: Y[];
+        deps?: Y;
         defaultData?: T;
     } = {}
 ): WrapRequestHook<T, T, Y> {
     const [$, set$] = useState<T>(options.defaultData as any);
-    const [state, setState] = useState<
-        'loading' | 'fetched' | Error | undefined
-    >();
+    const [state, setState] = useState<State>();
     const loading = state === 'loading';
     const fetched = state === 'fetched';
     const error = state instanceof Error ? state : undefined;
     const empty = fetched && isEmpty($);
-    const deps = options.deps || [];
+    const deps = (options.deps || []) as Y;
     let mounted = true;
 
     const request = useCallback(
@@ -90,7 +91,9 @@ export function useWrapRequest<T, Y>(
             }
 
             try {
-                const res = await (params ? req(params) : req(...deps));
+                const res = await (params
+                    ? (req as any)(params)
+                    : req(...deps));
 
                 if (mounted) {
                     set$(res);
