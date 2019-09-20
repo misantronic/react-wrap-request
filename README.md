@@ -5,6 +5,22 @@ A react-hook implementation for the [wrap-request](https://github.com/misantroni
 ## basic usage
 
 ```jsx
+function Component() {
+  const { $: items } = useWrapRequest(
+    () => fetch(`https://.../`), 
+    { 
+      defaultData: [], 
+      deps: [] // fetch will happen when component did mount
+    }
+  )
+  
+  return <div>{items.map(item => item.id)}</div>;
+}
+```
+
+## working with deps
+
+```jsx
 function Component(props) {
   const { $: items } = useWrapRequest(
     id => fetch(`https://.../${id}`), 
@@ -43,7 +59,7 @@ function Component(props) {
     id => fetch(`https://.../${id}`), 
     { 
       defaultData: [], 
-      deps: [props.id] // whenever props.id update, wrapRequest will re-fetch
+      deps: [props.id]
     }
   )
   
