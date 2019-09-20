@@ -4,7 +4,7 @@ A react-hook implementation for the [wrap-request](https://github.com/misantroni
 
 ## usage
 
-```js
+```jsx
 function Component(props) {
   const wrapRequest = useWrapRequest(
     () => fetch('https://...'), 
