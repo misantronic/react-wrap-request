@@ -3,14 +3,14 @@ interface RequestOptions {
     stateLoading?: boolean;
 }
 declare type ToupleArray = ReadonlyArray<any> | readonly [any];
-interface WrapRequestHook<T = any, TT = T, Y = undefined> {
+interface WrapRequestHook<T = any, TT = T> {
     $: T;
     result: T;
     loading: boolean;
     fetched: boolean;
     empty: boolean;
     error?: Error;
-    request(params?: Y, options?: RequestOptions): Promise<T | undefined>;
+    request(params?: unknown, options?: RequestOptions): Promise<T | undefined>;
     reset($: T): void;
     match(handlers: Handlers<TT>): any;
 }
@@ -24,8 +24,8 @@ interface Handlers<T> {
 export declare function useWrapRequest<T, Y extends ToupleArray>(req: (...deps: Y) => Promise<T>, options?: {
     deps?: Y;
     defaultData: T;
-}): WrapRequestHook<T, T, Y>;
+}): WrapRequestHook<T, T>;
 export declare function useWrapRequest<T, Y extends ToupleArray>(req: (...deps: Y) => Promise<T>, options?: {
     deps?: Y;
     defaultData?: T;
-}): WrapRequestHook<T | undefined, T, Y>;
+}): WrapRequestHook<T | undefined, T>;

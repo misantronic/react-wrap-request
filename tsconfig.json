@@ -15,12 +15,14 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,
+        "noImplicitAny": false,
         "noFallthroughCasesInSwitch": true,
         "moduleResolution": "node",
+        "esModuleInterop": true,
         "allowSyntheticDefaultImports": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true
     },
     "include": ["src/"],
-    "exclude": ["node_modules", "dist"]
+    "exclude": ["node_modules", "dist", "src/**/*.test.*"]
 }
