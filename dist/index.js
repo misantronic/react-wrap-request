@@ -53,6 +53,8 @@ export function useWrapRequest(req, options) {
                     res = _a.sent();
                     if (mounted) {
                         set$(res);
+                        // ensure state-transation from potential 'fetched' to 'fetched'
+                        setState(undefined);
                         setState('fetched');
                     }
                     return [2 /*return*/, res];

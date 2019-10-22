@@ -97,6 +97,8 @@ export function useWrapRequest<T, Y extends ToupleArray>(
 
                 if (mounted) {
                     set$(res);
+                    // ensure state-transation from potential 'fetched' to 'fetched'
+                    setState(undefined);
                     setState('fetched');
                 }
 
