@@ -17,7 +17,7 @@ interface WrapRequestHook<T = any, TT = T> {
 interface Handlers<T> {
     default?(): any;
     loading?(): any;
-    fetched?(value: T): any;
+    fetched?(value: Exclude<T, undefined>): any;
     empty?(): any;
     error?(...e: Error[]): any;
 }
