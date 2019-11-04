@@ -87,7 +87,7 @@ export function useWrapRequest(req, options) {
         return null;
     }, [error, empty, loading, fetched]);
     useEffect(function () {
-        if (options.deps) {
+        if (options.deps && options.deps.every(function (dep) { return dep !== undefined; })) {
             request();
         }
         return function () {

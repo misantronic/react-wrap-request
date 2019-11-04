@@ -24,7 +24,7 @@ interface WrapRequestHook<T = any, TT = T> {
 interface Handlers<T> {
     default?(): any;
     loading?(): any;
-    fetched?(value: T): any;
+    fetched?(value: Exclude<T, undefined>): any;
     empty?(): any;
     error?(...e: Error[]): any;
 }
@@ -129,7 +129,7 @@ export function useWrapRequest<T, Y extends ToupleArray>(
             }
 
             if (fetched && handlers.fetched) {
-                return handlers.fetched($);
+                return handlers.fetched($ as any);
             }
 
             if (handlers.default) {
@@ -142,7 +142,7 @@ export function useWrapRequest<T, Y extends ToupleArray>(
     );
 
     useEffect(() => {
-        if (options.deps) {
+        if (options.deps && options.deps.every(dep => dep !== undefined)) {
             request();
         }
 

@@ -11,6 +11,17 @@ test('it should not request when no deps are set', async () => {
     expect(result.current.error).toBe(undefined);
 });
 
+test('it should not request when deps-value are undefined', async () => {
+    const { result } = renderHook(() =>
+        useWrapRequest(async _ => true, { deps: [undefined] })
+    );
+
+    expect(result.current.$).toBe(undefined);
+    expect(result.current.loading).toBe(false);
+    expect(result.current.fetched).toBe(false);
+    expect(result.current.error).toBe(undefined);
+});
+
 test('it should initially request', async () => {
     const { result, waitForNextUpdate } = renderHook(() =>
         useWrapRequest(async () => 'abc', { deps: [] })
