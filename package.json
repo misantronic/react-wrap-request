@@ -30,7 +30,7 @@
         "@types/react": "^16.9.11",
         "jest": "^24.9.0",
         "react": "^16.11.0",
-        "react-test-renderer": "^16.10.2",
+        "react-test-renderer": "^16.11.0",
         "ts-jest": "^24.1.0",
         "tslib": "^1.10.0",
         "typescript": "^3.7.2"
