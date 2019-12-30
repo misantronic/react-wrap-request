@@ -51,6 +51,26 @@ function Component(props) {
 }
 ```
 
+## transform request
+
+```jsx
+function Component() {
+  const items = useWrapRequest(
+    () => fetch(`https://.../`), 
+    { 
+      defaultData: [], 
+      deps: [],
+      transform: items => items.map(item => ({ id: item.id }))
+    }
+  )
+  
+  console.log('source', items.source);
+  console.log('transformed result', items.$);
+  
+  return <div>{items.$.map(item => item.id)}</div>;
+}
+```
+
 ## pattern matching
 
 ```jsx
