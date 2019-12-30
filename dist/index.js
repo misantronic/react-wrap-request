@@ -28,19 +28,24 @@ export function useWrapRequest(req, options) {
     var _this = this;
     if (options === void 0) { options = {}; }
     var _a = __read(useState(options.defaultData), 2), $ = _a[0], set$ = _a[1];
-    var _b = __read(useState(), 2), state = _b[0], setState = _b[1];
+    var _b = __read(useState(options.defaultData), 2), source = _b[0], setSource = _b[1];
+    var _c = __read(useState(), 2), state = _c[0], setState = _c[1];
     var loading = state === 'loading';
     var fetched = state === 'fetched';
     var error = state instanceof Error ? state : undefined;
     var empty = fetched && isEmpty($);
     var deps = (options.deps || []);
     var mounted = true;
-    var request = useCallback(function (params, options) { return __awaiter(_this, void 0, void 0, function () {
+    var reset = function (data) {
+        set$(data);
+        setSource(data);
+    };
+    var request = useCallback(function (params, reqOptions) { return __awaiter(_this, void 0, void 0, function () {
         var res, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (options === undefined || options.stateLoading === true) {
+                    if (reqOptions === undefined || reqOptions.stateLoading === true) {
                         setState('loading');
                     }
                     _a.label = 1;
@@ -52,7 +57,13 @@ export function useWrapRequest(req, options) {
                 case 2:
                     res = _a.sent();
                     if (mounted) {
-                        set$(res);
+                        setSource(res);
+                        if (options.transform) {
+                            set$(options.transform(res));
+                        }
+                        else {
+                            set$(res);
+                        }
                         // ensure state-transation from potential 'fetched' to 'fetched'
                         setState(undefined);
                         setState('fetched');
@@ -97,11 +108,12 @@ export function useWrapRequest(req, options) {
     return {
         $: $,
         result: $,
+        source: source,
         loading: loading,
         fetched: fetched,
         error: error,
         empty: empty,
-        reset: set$,
+        reset: reset,
         request: request,
         match: match
     };

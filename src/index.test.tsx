@@ -106,3 +106,28 @@ test('it should request with param', async () => {
 
     expect(result.current.$).toBe('/path/to/100');
 });
+
+test('it should transform', async () => {
+    const { result } = renderHook(() =>
+        useWrapRequest(
+            async () => [
+                { id: 1000000 },
+                { id: 500 },
+                { id: 1000 },
+                { id: 2000000 }
+            ],
+            {
+                defaultData: [],
+                transform: items =>
+                    items.map(item => ({ doubleId: item.id * 2 }))
+            }
+        )
+    );
+
+    await act(async () => {
+        await result.current.request();
+    });
+
+    expect(result.current.source[1]).toEqual({ id: 500 });
+    expect(result.current.$[1]).toEqual({ doubleId: 1000 });
+});

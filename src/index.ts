@@ -9,15 +9,16 @@ interface RequestOptions {
 type State = 'loading' | 'fetched' | Error | undefined;
 type ToupleArray = ReadonlyArray<any> | readonly [any];
 
-interface WrapRequestHook<T = any, TT = T> {
-    $: T;
-    result: T;
+interface WrapRequestHook<T = any, TT = T, TX = T> {
+    $: TX;
+    result: TX;
+    source: T;
     loading: boolean;
     fetched: boolean;
     empty: boolean;
     error?: Error;
     request(params?: unknown, options?: RequestOptions): Promise<T | undefined>;
-    reset($: T): void;
+    reset($: T | TX): void;
     match(handlers: Handlers<TT>): any;
 }
 
@@ -54,28 +55,32 @@ function isEmpty(obj: any): boolean {
     return true;
 }
 
-export function useWrapRequest<T, Y extends ToupleArray>(
+export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     req: (...deps: Y) => Promise<T>,
     options?: {
         deps?: Y;
         defaultData: T;
+        transform?($: T): TX;
     }
-): WrapRequestHook<T, T>;
-export function useWrapRequest<T, Y extends ToupleArray>(
+): WrapRequestHook<T, T, TX>;
+export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     req: (...deps: Y) => Promise<T>,
     options?: {
         deps?: Y;
         defaultData?: T;
+        transform?($: T): TX;
     }
-): WrapRequestHook<T | undefined, T>;
-export function useWrapRequest<T, Y extends ToupleArray>(
+): WrapRequestHook<T | undefined, T, TX>;
+export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     req: (...deps: Y) => Promise<T>,
     options: {
         deps?: Y;
         defaultData?: T;
+        transform?($: T): TX;
     } = {}
-): WrapRequestHook<T, T> {
-    const [$, set$] = useState<T>(options.defaultData as any);
+): WrapRequestHook<T, T, TX> {
+    const [$, set$] = useState<TX>(options.defaultData as any);
+    const [source, setSource] = useState<T>(options.defaultData as any);
     const [state, setState] = useState<State>();
     const loading = state === 'loading';
     const fetched = state === 'fetched';
@@ -84,9 +89,14 @@ export function useWrapRequest<T, Y extends ToupleArray>(
     const deps = (options.deps || []) as Y;
     let mounted = true;
 
+    const reset = (data: T | TX) => {
+        set$(data as TX);
+        setSource(data as T);
+    };
+
     const request = useCallback(
-        async (params?: unknown, options?: RequestOptions) => {
-            if (options === undefined || options.stateLoading === true) {
+        async (params?: unknown, reqOptions?: RequestOptions) => {
+            if (reqOptions === undefined || reqOptions.stateLoading === true) {
                 setState('loading');
             }
 
@@ -96,7 +106,14 @@ export function useWrapRequest<T, Y extends ToupleArray>(
                     : req(...deps));
 
                 if (mounted) {
-                    set$(res);
+                    setSource(res);
+
+                    if (options.transform) {
+                        set$(options.transform(res));
+                    } else {
+                        set$(res);
+                    }
+
                     // ensure state-transation from potential 'fetched' to 'fetched'
                     setState(undefined);
                     setState('fetched');
@@ -154,11 +171,12 @@ export function useWrapRequest<T, Y extends ToupleArray>(
     return {
         $,
         result: $,
+        source,
         loading,
         fetched,
         error,
         empty,
-        reset: set$,
+        reset,
         request,
         match
     };
