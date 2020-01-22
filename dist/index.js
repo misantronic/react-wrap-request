@@ -96,7 +96,7 @@ export function useWrapRequest(req, options) {
             return handlers.default();
         }
         return null;
-    }, [error, empty, loading, fetched]);
+    }, [$, source, error, empty, loading, fetched]);
     useEffect(function () {
         if (options.deps && options.deps.every(function (dep) { return dep !== undefined; })) {
             request();

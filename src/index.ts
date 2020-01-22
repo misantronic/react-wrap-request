@@ -155,7 +155,7 @@ export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
 
             return null;
         },
-        [error, empty, loading, fetched]
+        [$, source, error, empty, loading, fetched]
     );
 
     useEffect(() => {
