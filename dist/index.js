@@ -1,5 +1,7 @@
-import { __awaiter, __generator, __read, __spread } from "tslib";
-import { useState, useCallback, useEffect } from 'react';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
 /** @see https://stackoverflow.com/a/4994244/1138860 */
 function isEmpty(obj) {
     if (!obj) {
@@ -24,12 +26,12 @@ function isEmpty(obj) {
     }
     return true;
 }
-export function useWrapRequest(req, options) {
+function useWrapRequest(req, options) {
     var _this = this;
     if (options === void 0) { options = {}; }
-    var _a = __read(useState(options.defaultData), 2), $ = _a[0], set$ = _a[1];
-    var _b = __read(useState(options.defaultData), 2), source = _b[0], setSource = _b[1];
-    var _c = __read(useState(), 2), state = _c[0], setState = _c[1];
+    var _a = tslib_1.__read(react_1.useState(options.defaultData), 2), $ = _a[0], set$ = _a[1];
+    var _b = tslib_1.__read(react_1.useState(options.defaultData), 2), source = _b[0], setSource = _b[1];
+    var _c = tslib_1.__read(react_1.useState(), 2), state = _c[0], setState = _c[1];
     var loading = state === 'loading';
     var fetched = state === 'fetched';
     var error = state instanceof Error ? state : undefined;
@@ -40,9 +42,9 @@ export function useWrapRequest(req, options) {
         set$(data);
         setSource(data);
     };
-    var request = useCallback(function (params, reqOptions) { return __awaiter(_this, void 0, void 0, function () {
+    var request = react_1.useCallback(function (params, reqOptions) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
         var res, e_1;
-        return __generator(this, function (_a) {
+        return tslib_1.__generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (reqOptions === undefined || reqOptions.stateLoading === true) {
@@ -53,7 +55,7 @@ export function useWrapRequest(req, options) {
                     _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, (params
                             ? req(params)
-                            : req.apply(void 0, __spread(deps)))];
+                            : req.apply(void 0, tslib_1.__spread(deps)))];
                 case 2:
                     res = _a.sent();
                     if (mounted) {
@@ -79,7 +81,7 @@ export function useWrapRequest(req, options) {
             }
         });
     }); }, deps);
-    var match = useCallback(function (handlers) {
+    var match = react_1.useCallback(function (handlers) {
         if (error && handlers.error) {
             return handlers.error(error);
         }
@@ -97,7 +99,7 @@ export function useWrapRequest(req, options) {
         }
         return null;
     }, [$, source, error, empty, loading, fetched]);
-    useEffect(function () {
+    react_1.useEffect(function () {
         if (options.deps && options.deps.every(function (dep) { return dep !== undefined; })) {
             request();
         }
@@ -118,4 +120,5 @@ export function useWrapRequest(req, options) {
         match: match
     };
 }
+exports.useWrapRequest = useWrapRequest;
 //# sourceMappingURL=index.js.map
