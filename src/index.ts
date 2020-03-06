@@ -55,29 +55,30 @@ function isEmpty(obj: any): boolean {
     return true;
 }
 
+interface WrapRequestOptions<Y, T, TX> {
+    deps?: Y;
+    defaultData?: T;
+    transform?($: T): TX;
+}
+
+interface WrapRequestOptionsDefaultData<Y, T, TX>
+    extends WrapRequestOptions<Y, T, TX> {
+    defaultData: T;
+}
+
 export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     req: (...deps: Y) => Promise<T>,
-    options?: {
-        deps?: Y;
-        defaultData: T;
-        transform?($: T): TX;
-    }
+    options?: WrapRequestOptionsDefaultData<Y, T, TX>
 ): WrapRequestHook<T, T, TX>;
+
 export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     req: (...deps: Y) => Promise<T>,
-    options?: {
-        deps?: Y;
-        defaultData?: T;
-        transform?($: T): TX;
-    }
+    options?: WrapRequestOptions<Y, T, TX>
 ): WrapRequestHook<T | undefined, T, TX>;
+
 export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     req: (...deps: Y) => Promise<T>,
-    options: {
-        deps?: Y;
-        defaultData?: T;
-        transform?($: T): TX;
-    } = {}
+    options: WrapRequestOptions<Y, T, TX> = {}
 ): WrapRequestHook<T, T, TX> {
     const [$, set$] = useState<TX>(options.defaultData as any);
     const [source, setSource] = useState<T>(options.defaultData as any);
