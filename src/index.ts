@@ -66,6 +66,27 @@ interface WrapRequestOptionsDefaultData<Y, T, TX>
     defaultData: T;
 }
 
+function useResult<T, TX>(
+    options: WrapRequestOptions<any, T, TX>
+): [TX, T, (data: T | TX) => void] {
+    const defaultData = options.defaultData as any;
+
+    const [$, set$] = useState<TX>(defaultData);
+    const [source, setSource] = useState<T>(defaultData);
+
+    function setResult(data: any) {
+        setSource(data);
+
+        if (options.transform) {
+            set$(options.transform(data));
+        } else {
+            set$(data);
+        }
+    }
+
+    return [$, source, setResult];
+}
+
 export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     req: (...deps: Y) => Promise<T>,
     options?: WrapRequestOptionsDefaultData<Y, T, TX>
@@ -80,8 +101,7 @@ export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     req: (...deps: Y) => Promise<T>,
     options: WrapRequestOptions<Y, T, TX> = {}
 ): WrapRequestHook<T, T, TX> {
-    const [$, set$] = useState<TX>(options.defaultData as any);
-    const [source, setSource] = useState<T>(options.defaultData as any);
+    const [$, source, setResult] = useResult(options);
     const [state, setState] = useState<State>();
     const loading = state === 'loading';
     const fetched = state === 'fetched';
@@ -89,11 +109,6 @@ export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     const empty = fetched && isEmpty($);
     const deps = (options.deps || []) as Y;
     let mounted = true;
-
-    const reset = (data: T | TX) => {
-        set$(data as TX);
-        setSource(data as T);
-    };
 
     const request = useCallback(
         async (params?: unknown, reqOptions?: RequestOptions) => {
@@ -107,13 +122,7 @@ export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
                     : req(...deps));
 
                 if (mounted) {
-                    setSource(res);
-
-                    if (options.transform) {
-                        set$(options.transform(res));
-                    } else {
-                        set$(res);
-                    }
+                    setResult(res);
 
                     // ensure state-transation from potential 'fetched' to 'fetched'
                     setState(undefined);
@@ -177,7 +186,7 @@ export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
         fetched,
         error,
         empty,
-        reset,
+        reset: setResult,
         request,
         match
     };
