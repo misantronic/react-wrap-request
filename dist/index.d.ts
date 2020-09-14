@@ -3,7 +3,7 @@ interface RequestOptions {
     stateLoading?: boolean;
 }
 declare type ToupleArray = ReadonlyArray<any> | readonly [any];
-interface WrapRequestHook<T = any, TT = T, TX = T> {
+interface WrapRequestHook<T = any, TX = T> {
     $: TX;
     result: TX;
     source: T;
@@ -13,7 +13,7 @@ interface WrapRequestHook<T = any, TT = T, TX = T> {
     error?: Error;
     request(params?: unknown, options?: RequestOptions): Promise<T | undefined>;
     reset($: T | TX): void;
-    match(handlers: Handlers<TT>): any;
+    match(handlers: Handlers<TX>): any;
 }
 interface Handlers<T> {
     default?(): any;
@@ -22,13 +22,13 @@ interface Handlers<T> {
     empty?(): any;
     error?(...e: Error[]): any;
 }
-export declare function useWrapRequest<T, Y extends ToupleArray, TX = T>(req: (...deps: Y) => Promise<T>, options?: {
-    deps?: Y;
-    defaultData: T;
-    transform?($: T): TX;
-}): WrapRequestHook<T, T, TX>;
-export declare function useWrapRequest<T, Y extends ToupleArray, TX = T>(req: (...deps: Y) => Promise<T>, options?: {
+interface WrapRequestOptions<Y, T, TX> {
     deps?: Y;
     defaultData?: T;
     transform?($: T): TX;
-}): WrapRequestHook<T | undefined, T, TX>;
+}
+interface WrapRequestOptionsDefaultData<Y, T, TX> extends WrapRequestOptions<Y, T, TX> {
+    defaultData: T;
+}
+export declare function useWrapRequest<T, Y extends ToupleArray, TX = T>(req: (...deps: Y) => Promise<T>, options?: WrapRequestOptionsDefaultData<Y, T, TX>): WrapRequestHook<T, TX>;
+export declare function useWrapRequest<T, Y extends ToupleArray, TX = T>(req: (...deps: Y) => Promise<T>, options?: WrapRequestOptions<Y, T, TX>): WrapRequestHook<T | undefined, TX>;

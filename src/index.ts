@@ -9,7 +9,7 @@ interface RequestOptions {
 type State = 'loading' | 'fetched' | Error | undefined;
 type ToupleArray = ReadonlyArray<any> | readonly [any];
 
-interface WrapRequestHook<T = any, TT = T, TX = T> {
+interface WrapRequestHook<T = any, TX = T> {
     $: TX;
     result: TX;
     source: T;
@@ -19,7 +19,7 @@ interface WrapRequestHook<T = any, TT = T, TX = T> {
     error?: Error;
     request(params?: unknown, options?: RequestOptions): Promise<T | undefined>;
     reset($: T | TX): void;
-    match(handlers: Handlers<TT>): any;
+    match(handlers: Handlers<TX>): any;
 }
 
 interface Handlers<T> {
@@ -90,17 +90,17 @@ function useResult<T, TX>(
 export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     req: (...deps: Y) => Promise<T>,
     options?: WrapRequestOptionsDefaultData<Y, T, TX>
-): WrapRequestHook<T, T, TX>;
+): WrapRequestHook<T, TX>;
 
 export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     req: (...deps: Y) => Promise<T>,
     options?: WrapRequestOptions<Y, T, TX>
-): WrapRequestHook<T | undefined, T, TX>;
+): WrapRequestHook<T | undefined, TX>;
 
 export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     req: (...deps: Y) => Promise<T>,
     options: WrapRequestOptions<Y, T, TX> = {}
-): WrapRequestHook<T, T, TX> {
+): WrapRequestHook<T, TX> {
     const [$, source, setResult] = useResult(options);
     const [state, setState] = useState<State>();
     const loading = state === 'loading';
@@ -142,7 +142,7 @@ export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     );
 
     const match = useCallback(
-        (handlers: Handlers<T>) => {
+        (handlers: Handlers<TX>) => {
             if (error && handlers.error) {
                 return handlers.error(error);
             }
@@ -169,7 +169,7 @@ export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
     );
 
     useEffect(() => {
-        if (options.deps && options.deps.every(dep => dep !== undefined)) {
+        if (options.deps && options.deps.every((dep) => dep !== undefined)) {
             request();
         }
 
@@ -188,6 +188,6 @@ export function useWrapRequest<T, Y extends ToupleArray, TX = T>(
         empty,
         reset: setResult,
         request,
-        match
+        match,
     };
 }

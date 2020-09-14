@@ -26,22 +26,32 @@ function isEmpty(obj) {
     }
     return true;
 }
+function useResult(options) {
+    var defaultData = options.defaultData;
+    var _a = tslib_1.__read(react_1.useState(defaultData), 2), $ = _a[0], set$ = _a[1];
+    var _b = tslib_1.__read(react_1.useState(defaultData), 2), source = _b[0], setSource = _b[1];
+    function setResult(data) {
+        setSource(data);
+        if (options.transform) {
+            set$(options.transform(data));
+        }
+        else {
+            set$(data);
+        }
+    }
+    return [$, source, setResult];
+}
 function useWrapRequest(req, options) {
     var _this = this;
     if (options === void 0) { options = {}; }
-    var _a = tslib_1.__read(react_1.useState(options.defaultData), 2), $ = _a[0], set$ = _a[1];
-    var _b = tslib_1.__read(react_1.useState(options.defaultData), 2), source = _b[0], setSource = _b[1];
-    var _c = tslib_1.__read(react_1.useState(), 2), state = _c[0], setState = _c[1];
+    var _a = tslib_1.__read(useResult(options), 3), $ = _a[0], source = _a[1], setResult = _a[2];
+    var _b = tslib_1.__read(react_1.useState(), 2), state = _b[0], setState = _b[1];
     var loading = state === 'loading';
     var fetched = state === 'fetched';
     var error = state instanceof Error ? state : undefined;
     var empty = fetched && isEmpty($);
     var deps = (options.deps || []);
     var mounted = true;
-    var reset = function (data) {
-        set$(data);
-        setSource(data);
-    };
     var request = react_1.useCallback(function (params, reqOptions) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
         var res, e_1;
         return tslib_1.__generator(this, function (_a) {
@@ -59,13 +69,7 @@ function useWrapRequest(req, options) {
                 case 2:
                     res = _a.sent();
                     if (mounted) {
-                        setSource(res);
-                        if (options.transform) {
-                            set$(options.transform(res));
-                        }
-                        else {
-                            set$(res);
-                        }
+                        setResult(res);
                         // ensure state-transation from potential 'fetched' to 'fetched'
                         setState(undefined);
                         setState('fetched');
@@ -115,9 +119,9 @@ function useWrapRequest(req, options) {
         fetched: fetched,
         error: error,
         empty: empty,
-        reset: reset,
+        reset: setResult,
         request: request,
-        match: match
+        match: match,
     };
 }
 exports.useWrapRequest = useWrapRequest;
