@@ -8,7 +8,7 @@
         "sourceMap": true,
         "outDir": "./dist",
         "rootDir": "./src",
-        "importHelpers": true,
+        "importHelpers": false,
         "downlevelIteration": true,
         "strict": true,
         "skipLibCheck": true,

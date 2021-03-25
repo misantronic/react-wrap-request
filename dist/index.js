@@ -1,128 +1,128 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = require("tslib");
-var react_1 = require("react");
-/** @see https://stackoverflow.com/a/4994244/1138860 */
-function isEmpty(obj) {
-    if (!obj) {
-        return true;
-    }
-    if (obj > 0) {
-        return false;
-    }
-    if (obj.length > 0) {
-        return false;
-    }
-    if (obj.length === 0) {
-        return true;
-    }
-    if (typeof obj !== 'object') {
-        return true;
-    }
-    for (var key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            return false;
-        }
-    }
-    return true;
-}
-function useResult(options) {
-    var defaultData = options.defaultData;
-    var _a = tslib_1.__read(react_1.useState(defaultData), 2), $ = _a[0], set$ = _a[1];
-    var _b = tslib_1.__read(react_1.useState(defaultData), 2), source = _b[0], setSource = _b[1];
-    function setResult(data) {
-        setSource(data);
-        if (options.transform) {
-            set$(options.transform(data));
-        }
-        else {
-            set$(data);
-        }
-    }
-    return [$, source, setResult];
-}
+exports.useWrapRequest = void 0;
+var React = __importStar(require("react"));
+var wrap_request_1 = require("wrap-request");
 function useWrapRequest(req, options) {
     var _this = this;
     if (options === void 0) { options = {}; }
-    var _a = tslib_1.__read(useResult(options), 3), $ = _a[0], source = _a[1], setResult = _a[2];
-    var _b = tslib_1.__read(react_1.useState(), 2), state = _b[0], setState = _b[1];
-    var loading = state === 'loading';
-    var fetched = state === 'fetched';
-    var error = state instanceof Error ? state : undefined;
-    var empty = fetched && isEmpty($);
+    var _a = __read(React.useState(), 2), setResult = _a[1];
+    var _b = __read(React.useState(), 2), setState = _b[1];
     var deps = (options.deps || []);
-    var mounted = true;
-    var request = react_1.useCallback(function (params, reqOptions) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-        var res, e_1;
-        return tslib_1.__generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (reqOptions === undefined || reqOptions.stateLoading === true) {
-                        setState('loading');
+    var wrapped = React.useMemo(function () {
+        return wrap_request_1.wrapRequest(function (deps) {
+            if (deps === void 0) { deps = []; }
+            return __awaiter(_this, void 0, void 0, function () {
+                var res, e_1;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            _a.trys.push([0, 2, , 3]);
+                            return [4 /*yield*/, req.apply(void 0, __spread(deps))];
+                        case 1:
+                            res = _a.sent();
+                            setResult(res);
+                            return [2 /*return*/, res];
+                        case 2:
+                            e_1 = _a.sent();
+                            setState(e_1);
+                            throw e_1;
+                        case 3: return [2 /*return*/];
                     }
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, (params
-                            ? req(params)
-                            : req.apply(void 0, tslib_1.__spread(deps)))];
-                case 2:
-                    res = _a.sent();
-                    if (mounted) {
-                        setResult(res);
-                        // ensure state-transation from potential 'fetched' to 'fetched'
-                        setState(undefined);
-                        setState('fetched');
-                    }
-                    return [2 /*return*/, res];
-                case 3:
-                    e_1 = _a.sent();
-                    if (mounted) {
-                        setState(e_1);
-                    }
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/, undefined];
-            }
+                });
+            });
+        }, {
+            defaultData: options.defaultData,
         });
-    }); }, deps);
-    var match = react_1.useCallback(function (handlers) {
-        if (error && handlers.error) {
-            return handlers.error(error);
-        }
-        if (empty && handlers.empty) {
-            return handlers.empty();
-        }
-        if (loading && handlers.loading) {
-            return handlers.loading();
-        }
-        if (fetched && handlers.fetched) {
-            return handlers.fetched($);
-        }
-        if (handlers.default) {
-            return handlers.default();
-        }
-        return null;
-    }, [$, source, error, empty, loading, fetched]);
-    react_1.useEffect(function () {
+    }, []);
+    return React.useMemo(function () {
         if (options.deps && options.deps.every(function (dep) { return dep !== undefined; })) {
-            request();
+            wrapped.request(deps);
         }
-        return function () {
-            mounted = false;
-        };
+        wrapped.match({
+            default: function () { return setState('default'); },
+            empty: function () { return setState('empty'); },
+            error: function (e) { return setState(e); },
+            fetched: function () { return setState('fetched'); },
+            loading: function () { return setState('loading'); },
+        });
+        return wrapped;
     }, deps);
-    return {
-        $: $,
-        result: $,
-        source: source,
-        loading: loading,
-        fetched: fetched,
-        error: error,
-        empty: empty,
-        reset: setResult,
-        request: request,
-        match: match,
-    };
 }
 exports.useWrapRequest = useWrapRequest;
 //# sourceMappingURL=index.js.map

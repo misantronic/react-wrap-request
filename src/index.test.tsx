@@ -35,6 +35,19 @@ test('it should initially request', async () => {
     expect(result.current.error).toBe(undefined);
 });
 
+test('it should manually request', async () => {
+    const { result } = renderHook(() => useWrapRequest(async () => 'abc'));
+
+    await act(async () => {
+        await result.current.request();
+    });
+
+    expect(result.current.$).toBe('abc');
+    expect(result.current.loading).toBe(false);
+    expect(result.current.fetched).toBe(true);
+    expect(result.current.error).toBe(undefined);
+});
+
 test('it should have default values', async () => {
     const { result } = renderHook(() =>
         useWrapRequest(async () => 'abc', { defaultData: 'cba' })
@@ -118,16 +131,14 @@ test('it should transform', async () => {
             ],
             {
                 defaultData: [],
-                transform: (items) =>
-                    items.map((item) => ({ doubleId: item.id * 2 })),
             }
-        )
+        ).pipe((items) => items?.map((item) => ({ doubleId: item.id * 2 })))
     );
 
     await act(async () => {
         await result.current.request();
     });
 
-    expect(result.current.source[1]).toEqual({ id: 500 });
-    expect(result.current.$[1]).toEqual({ doubleId: 1000 });
+    expect(result.current.source?.[1]).toEqual({ id: 500 });
+    expect(result.current.$?.[1]).toEqual({ doubleId: 1000 });
 });
