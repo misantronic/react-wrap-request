@@ -6,15 +6,12 @@ A react-hook implementation for the [wrap-request](https://github.com/misantroni
 
 ```jsx
 function Component() {
-  const { $: items } = useWrapRequest(
-    () => fetch(`https://.../`), 
-    { 
-      defaultData: [], 
-      deps: [] // fetch will happen when component did mount
-    }
-  )
-  
-  return <div>{items.map(item => item.id)}</div>;
+    const { $: items } = useWrapRequest(() => fetch(`https://.../`), {
+        defaultData: [],
+        deps: [], // fetch will happen when component did mount
+    });
+
+    return <div>{items.map((item) => item.id)}</div>;
 }
 ```
 
@@ -22,15 +19,12 @@ function Component() {
 
 ```jsx
 function Component(props) {
-  const { $: items } = useWrapRequest(
-    id => fetch(`https://.../${id}`), 
-    { 
-      defaultData: [], 
-      deps: [props.id] // whenever props.id update, wrapRequest will re-fetch
-    }
-  )
-  
-  return <div>{items.map(item => item.id)}</div>;
+    const { $: items } = useWrapRequest((id) => fetch(`https://.../${id}`), {
+        defaultData: [],
+        deps: [props.id], // whenever props.id update, wrapRequest will re-fetch
+    });
+
+    return <div>{items.map((item) => item.id)}</div>;
 }
 ```
 
@@ -38,36 +32,33 @@ function Component(props) {
 
 ```jsx
 function Component(props) {
-  const wrapRequest = useWrapRequest(
-    id => fetch(`https://.../${id}`), 
-    { defaultData: [] }
-  )
-  
-  useEffect(() => {
-    wrapRequest.request(100);
-  }, [])
-  
-  return <div>{wrapRequest.items.map(item => item.id)}</div>;
+    const wrapRequest = useWrapRequest((id) => fetch(`https://.../${id}`), {
+        defaultData: [],
+    });
+
+    useEffect(() => {
+        wrapRequest.request(100);
+    }, []);
+
+    return <div>{wrapRequest.items.map((item) => item.id)}</div>;
 }
 ```
 
 ## transform request
 
+see https://github.com/misantronic/wrap-request#pipe--transform
+
 ```jsx
 function Component() {
-  const items = useWrapRequest(
-    () => fetch(`https://.../`), 
-    { 
-      defaultData: [], 
-      deps: [],
-      transform: items => items.map(item => ({ id: item.id }))
-    }
-  )
-  
-  console.log('source', items.source);
-  console.log('transformed result', items.$);
-  
-  return <div>{items.$.map(item => item.id)}</div>;
+    const items = useWrapRequest(() => fetch(`https://.../`), {
+        defaultData: [],
+        deps: [],
+    }).pipe((items) => items.map((item) => ({ id: item.id })));
+
+    console.log('source', items.source);
+    console.log('transformed result', items.$);
+
+    return <div>{items.$.map((item) => item.id)}</div>;
 }
 ```
 
@@ -75,21 +66,16 @@ function Component() {
 
 ```jsx
 function Component(props) {
-  const wrapRequest = useWrapRequest(
-    id => fetch(`https://.../${id}`), 
-    { 
-      defaultData: [], 
-      deps: [props.id]
-    }
-  )
-  
-  return wrapRequest.match({
-    loading: () => <div>Loading</div>,
-    error: () => <div>Error</div>,
-    empty: () => <div>No items.</div>,
-    fetched: items => (
-      <div>{items.map(item => item.id)}</div>
-    )
-  });
+    const wrapRequest = useWrapRequest((id) => fetch(`https://.../${id}`), {
+        defaultData: [],
+        deps: [props.id],
+    });
+
+    return wrapRequest.match({
+        loading: () => <div>Loading</div>,
+        error: () => <div>Error</div>,
+        empty: () => <div>No items.</div>,
+        fetched: (items) => <div>{items.map((item) => item.id)}</div>,
+    });
 }
 ```
