@@ -16,35 +16,27 @@ export function useWrapRequest<T, Y extends ToupleArray>(
     const [, setState] = React.useState();
     const deps = (options.deps || []) as Y;
 
-    const wrapped = React.useMemo(
-        () =>
-            wrapRequest(
-                async (deps = []) => {
-                    try {
-                        const res = await req(...deps);
+    const wrapped = React.useMemo(() => {
+        const wr = wrapRequest(
+            async (deps = []) => {
+                try {
+                    const res = await req(...deps);
 
-                        setResult(res);
+                    setResult(res);
 
-                        return res;
-                    } catch (e) {
-                        setState(e);
+                    return res;
+                } catch (e) {
+                    setState(e);
 
-                        throw e;
-                    }
-                },
-                {
-                    defaultData: options.defaultData,
+                    throw e;
                 }
-            ),
-        []
-    );
+            },
+            {
+                defaultData: options.defaultData,
+            }
+        );
 
-    return React.useMemo(() => {
-        if (options.deps && options.deps.every((dep) => dep !== undefined)) {
-            wrapped.request(deps);
-        }
-
-        wrapped.match({
+        wr.match({
             default: () => setState('default'),
             empty: () => setState('empty'),
             error: (e) => setState(e),
@@ -52,6 +44,14 @@ export function useWrapRequest<T, Y extends ToupleArray>(
             loading: () => setState('loading'),
         });
 
-        return wrapped;
+        return wr;
+    }, []);
+
+    React.useEffect(() => {
+        if (options.deps && options.deps.every((dep) => dep !== undefined)) {
+            wrapped.request(deps);
+        }
     }, deps);
+
+    return wrapped;
 }

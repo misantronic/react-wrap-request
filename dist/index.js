@@ -85,7 +85,7 @@ function useWrapRequest(req, options) {
     var _b = __read(React.useState(), 2), setState = _b[1];
     var deps = (options.deps || []);
     var wrapped = React.useMemo(function () {
-        return wrap_request_1.wrapRequest(function (deps) {
+        var wr = wrap_request_1.wrapRequest(function (deps) {
             if (deps === void 0) { deps = []; }
             return __awaiter(_this, void 0, void 0, function () {
                 var res, e_1;
@@ -109,20 +109,21 @@ function useWrapRequest(req, options) {
         }, {
             defaultData: options.defaultData,
         });
-    }, []);
-    return React.useMemo(function () {
-        if (options.deps && options.deps.every(function (dep) { return dep !== undefined; })) {
-            wrapped.request(deps);
-        }
-        wrapped.match({
+        wr.match({
             default: function () { return setState('default'); },
             empty: function () { return setState('empty'); },
             error: function (e) { return setState(e); },
             fetched: function () { return setState('fetched'); },
             loading: function () { return setState('loading'); },
         });
-        return wrapped;
+        return wr;
+    }, []);
+    React.useEffect(function () {
+        if (options.deps && options.deps.every(function (dep) { return dep !== undefined; })) {
+            wrapped.request(deps);
+        }
     }, deps);
+    return wrapped;
 }
 exports.useWrapRequest = useWrapRequest;
 //# sourceMappingURL=index.js.map
