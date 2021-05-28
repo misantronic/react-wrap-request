@@ -3775,10 +3775,10 @@ wrap-ansi@^6.2.0:
     string-width "^4.1.0"
     strip-ansi "^6.0.0"
 
-wrap-request@^5.1.3:
-  version "5.1.3"
-  resolved "https://registry.yarnpkg.com/wrap-request/-/wrap-request-5.1.3.tgz#8814ef385e78e1804f371e1f790c353453d8b7cd"
-  integrity sha512-wfH0Lgd4lQZ6Nri8zb3ouwNa6JC6Xc9fptdhKtUMiUKgAhRB5Bm4XqEByegHCi8akUyhvOGctlYdDvjfooHb+w==
+wrap-request@^5.1.7:
+  version "5.1.7"
+  resolved "https://registry.yarnpkg.com/wrap-request/-/wrap-request-5.1.7.tgz#7e36b81e94d60251798660ed8c65aa4a15c370b0"
+  integrity sha512-vDdSvJRCGdrOID+1xmKJMilh71DIgk+/FyZZ9h4WBkPpjWEV/2wYhMjLTEYqs9FF8LSUD5pRV371ElEEZqVYeQ==
 
 wrappy@1:
   version "1.0.2"
