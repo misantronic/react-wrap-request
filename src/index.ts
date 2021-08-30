@@ -6,15 +6,17 @@ type ToupleArray = ReadonlyArray<any> | readonly [any];
 interface WrapRequestOptions<Y, T> {
     deps?: Y;
     defaultData?: T;
+    cacheKey?: string;
 }
 
 export function useWrapRequest<T, Y extends ToupleArray>(
     req: (...deps: Y) => Promise<T>,
     options: WrapRequestOptions<Y, T> = {}
 ) {
-    const [, setResult] = React.useState();
-    const [, setState] = React.useState();
-    const deps = (options.deps || []) as Y;
+    const [, setResult] = React.useState<T>();
+    const [, setState] = React.useState<string | Error>();
+    const {deps: oDepts, ...rest } = options;
+    const deps = (oDepts || []) as Y;
 
     const wrapped = React.useMemo(() => {
         const wr = wrapRequest(
@@ -31,9 +33,7 @@ export function useWrapRequest<T, Y extends ToupleArray>(
                     throw e;
                 }
             },
-            {
-                defaultData: options.defaultData,
-            }
+            rest
         );
 
         wr.match({
@@ -48,7 +48,7 @@ export function useWrapRequest<T, Y extends ToupleArray>(
     }, []);
 
     React.useEffect(() => {
-        if (options.deps && options.deps.every((dep) => dep !== undefined)) {
+        if (oDepts && oDepts.every((dep) => dep !== undefined)) {
             wrapped.request(deps);
         }
     }, deps);
