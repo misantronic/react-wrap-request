@@ -15,8 +15,8 @@ export function useWrapRequest<T, Y extends ToupleArray>(
 ) {
     const [, setResult] = React.useState<T>();
     const [, setState] = React.useState<string | Error>();
-    const {deps: oDepts, ...rest } = options;
-    const deps = (oDepts || []) as Y;
+    const {deps: orgDepts, ...wrapRequestOptions } = options;
+    const deps = (orgDepts || []) as Y;
 
     const wrapped = React.useMemo(() => {
         const wr = wrapRequest(
@@ -33,7 +33,7 @@ export function useWrapRequest<T, Y extends ToupleArray>(
                     throw e;
                 }
             },
-            rest
+            wrapRequestOptions
         );
 
         wr.match({
@@ -48,7 +48,7 @@ export function useWrapRequest<T, Y extends ToupleArray>(
     }, []);
 
     React.useEffect(() => {
-        if (oDepts && oDepts.every((dep) => dep !== undefined)) {
+        if (orgDepts && orgDepts.every((dep) => dep !== undefined)) {
             wrapped.request(deps);
         }
     }, deps);
