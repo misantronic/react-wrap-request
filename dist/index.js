@@ -54,6 +54,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -83,7 +94,8 @@ function useWrapRequest(req, options) {
     if (options === void 0) { options = {}; }
     var _a = __read(React.useState(), 2), setResult = _a[1];
     var _b = __read(React.useState(), 2), setState = _b[1];
-    var deps = (options.deps || []);
+    var orgDeps = options.deps, wrapRequestOptions = __rest(options, ["deps"]);
+    var deps = (orgDeps || []);
     var wrapped = React.useMemo(function () {
         var wr = wrap_request_1.wrapRequest(function (deps) {
             if (deps === void 0) { deps = []; }
@@ -106,9 +118,7 @@ function useWrapRequest(req, options) {
                     }
                 });
             });
-        }, {
-            defaultData: options.defaultData,
-        });
+        }, wrapRequestOptions);
         wr.match({
             default: function () { return setState('default'); },
             empty: function () { return setState('empty'); },
@@ -119,7 +129,7 @@ function useWrapRequest(req, options) {
         return wr;
     }, []);
     React.useEffect(function () {
-        if (options.deps && options.deps.every(function (dep) { return dep !== undefined; })) {
+        if (orgDeps && orgDeps.every(function (dep) { return dep !== undefined; })) {
             wrapped.request(deps);
         }
     }, deps);
