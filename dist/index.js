@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -81,9 +81,10 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useWrapRequest = void 0;
@@ -97,15 +98,19 @@ function useWrapRequest(req, options) {
     var orgDeps = options.deps, wrapRequestOptions = __rest(options, ["deps"]);
     var deps = (orgDeps || []);
     var wrapped = React.useMemo(function () {
-        var wr = wrap_request_1.wrapRequest(function (deps) {
-            if (deps === void 0) { deps = []; }
+        // @ts-ignore
+        var wr = wrap_request_1.wrapRequest(function () {
+            var deps = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                deps[_i] = arguments[_i];
+            }
             return __awaiter(_this, void 0, void 0, function () {
                 var res, e_1;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             _a.trys.push([0, 2, , 3]);
-                            return [4 /*yield*/, req.apply(void 0, __spread(deps))];
+                            return [4 /*yield*/, req.apply(void 0, __spreadArray([], __read(deps)))];
                         case 1:
                             res = _a.sent();
                             setResult(res);
@@ -129,8 +134,8 @@ function useWrapRequest(req, options) {
         return wr;
     }, []);
     React.useEffect(function () {
-        if (orgDeps && orgDeps.every(function (dep) { return dep !== undefined; })) {
-            wrapped.request(deps);
+        if (orgDeps === null || orgDeps === void 0 ? void 0 : orgDeps.every(function (dep) { return dep !== undefined; })) {
+            wrapped.request.apply(wrapped, __spreadArray([], __read(deps)));
         }
     }, deps);
     return wrapped;

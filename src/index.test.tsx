@@ -110,7 +110,7 @@ test('it should error', async () => {
 
 test('it should request with param', async () => {
     const { result } = renderHook(() =>
-        useWrapRequest(async (id) => `/path/to/${id}`)
+        useWrapRequest(async (id: number) => `/path/to/${id}`)
     );
 
     await act(async () => {
