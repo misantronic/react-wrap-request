@@ -15,26 +15,23 @@ export function useWrapRequest<T, Y extends ToupleArray>(
 ) {
     const [, setResult] = React.useState<T>();
     const [, setState] = React.useState<string | Error>();
-    const {deps: orgDeps, ...wrapRequestOptions } = options;
+    const { deps: orgDeps, ...wrapRequestOptions } = options;
     const deps = (orgDeps || []) as Y;
 
     const wrapped = React.useMemo(() => {
-        const wr = wrapRequest(
-            async (deps = []) => {
-                try {
-                    const res = await req(...deps);
+        const wr = wrapRequest(async (deps = []) => {
+            try {
+                const res = await req(...deps);
 
-                    setResult(res);
+                setResult(res);
 
-                    return res;
-                } catch (e) {
-                    setState(e);
+                return res;
+            } catch (e) {
+                setState(e as Error);
 
-                    throw e;
-                }
-            },
-            wrapRequestOptions
-        );
+                throw e;
+            }
+        }, wrapRequestOptions);
 
         wr.match({
             default: () => setState('default'),
