@@ -45,7 +45,7 @@ export function useWrapRequest<T, Y extends ToupleArray>(
     }, []);
 
     React.useEffect(() => {
-        if (orgDeps && orgDeps.every((dep) => dep !== undefined)) {
+        if (orgDeps?.every((dep) => dep !== undefined)) {
             wrapped.request(deps);
         }
     }, deps);
