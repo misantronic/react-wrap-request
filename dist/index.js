@@ -98,8 +98,9 @@ function useWrapRequest(req, options) {
     var orgDeps = options.deps, wrapRequestOptions = __rest(options, ["deps"]);
     var deps = (orgDeps || []);
     var wrapped = React.useMemo(function () {
+        var wrapRequestFn = options.wrapRequestFn || wrap_request_1.wrapRequest;
         // @ts-ignore
-        var wr = wrap_request_1.wrapRequest(function () {
+        var wr = wrapRequestFn(function () {
             var deps = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 deps[_i] = arguments[_i];

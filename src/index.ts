@@ -7,6 +7,7 @@ export interface ReactWrapRequestOptions<Y, T> {
     deps?: Y;
     defaultData?: T;
     cacheKey?: string;
+    wrapRequestFn?: typeof wrapRequest;
 }
 
 export function useWrapRequest<T, Y extends ToupleArray>(
@@ -19,8 +20,10 @@ export function useWrapRequest<T, Y extends ToupleArray>(
     const deps = (orgDeps || []) as Y;
 
     const wrapped = React.useMemo(() => {
+        const wrapRequestFn = options.wrapRequestFn || wrapRequest;
+
         // @ts-ignore
-        const wr = wrapRequest(async (...deps: Y) => {
+        const wr = wrapRequestFn(async (...deps: Y) => {
             try {
                 const res = await req(...deps);
 
