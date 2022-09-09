@@ -3,7 +3,7 @@ import { wrapRequest } from 'wrap-request';
 
 type ToupleArray = ReadonlyArray<any> | readonly [any];
 
-interface WrapRequestOptions<Y, T> {
+export interface ReactWrapRequestOptions<Y, T> {
     deps?: Y;
     defaultData?: T;
     cacheKey?: string;
@@ -11,7 +11,7 @@ interface WrapRequestOptions<Y, T> {
 
 export function useWrapRequest<T, Y extends ToupleArray>(
     req: (...deps: Y) => Promise<T>,
-    options: WrapRequestOptions<Y, T> = {}
+    options: ReactWrapRequestOptions<Y, T> = {}
 ) {
     const [, setResult] = React.useState<T>();
     const [, setState] = React.useState<string | Error>();
