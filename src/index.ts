@@ -28,22 +28,26 @@ export function useWrapRequest<T, Y extends ToupleArray>(
             try {
                 const res = await req(...deps);
 
-                setResult(res);
+                if (mounted) {
+                    setResult(res);
+                }
 
                 return res;
             } catch (e) {
-                setState(e as Error);
+                if (mounted) {
+                    setState(e as Error);
+                }
 
                 throw e;
             }
         }, wrapRequestOptions);
 
         wr.match({
-            default: () => setState('default'),
-            empty: () => setState('empty'),
-            error: (e) => setState(e),
-            fetched: () => setState('fetched'),
-            loading: () => setState('loading'),
+            default: () => mounted && setState('default'),
+            empty: () => mounted && setState('empty'),
+            error: (e) => mounted && setState(e),
+            fetched: () => mounted && setState('fetched'),
+            loading: () => mounted && setState('loading'),
         });
 
         return wr;

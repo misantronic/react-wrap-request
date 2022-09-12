@@ -115,11 +115,15 @@ function useWrapRequest(req, options) {
                             return [4 /*yield*/, req.apply(void 0, __spreadArray([], __read(deps)))];
                         case 1:
                             res = _a.sent();
-                            setResult(res);
+                            if (mounted) {
+                                setResult(res);
+                            }
                             return [2 /*return*/, res];
                         case 2:
                             e_1 = _a.sent();
-                            setState(e_1);
+                            if (mounted) {
+                                setState(e_1);
+                            }
                             throw e_1;
                         case 3: return [2 /*return*/];
                     }
@@ -127,11 +131,11 @@ function useWrapRequest(req, options) {
             });
         }, wrapRequestOptions);
         wr.match({
-            default: function () { return setState('default'); },
-            empty: function () { return setState('empty'); },
-            error: function (e) { return setState(e); },
-            fetched: function () { return setState('fetched'); },
-            loading: function () { return setState('loading'); },
+            default: function () { return mounted && setState('default'); },
+            empty: function () { return mounted && setState('empty'); },
+            error: function (e) { return mounted && setState(e); },
+            fetched: function () { return mounted && setState('fetched'); },
+            loading: function () { return mounted && setState('loading'); },
         });
         return wr;
     }, []);
