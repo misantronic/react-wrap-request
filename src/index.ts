@@ -57,11 +57,14 @@ export function useWrapRequest<T, Y extends ToupleArray>(
         if (mounted && orgDeps?.every((dep) => dep !== undefined)) {
             wrapped.request(...(deps as any));
         }
-
-        return () => {
-            mounted = false;
-        };
     }, deps);
+
+    React.useEffect(
+        () => () => {
+            mounted = false;
+        },
+        []
+    );
 
     return wrapped;
 }

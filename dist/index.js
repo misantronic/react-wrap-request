@@ -143,10 +143,10 @@ function useWrapRequest(req, options) {
         if (mounted && (orgDeps === null || orgDeps === void 0 ? void 0 : orgDeps.every(function (dep) { return dep !== undefined; }))) {
             wrapped.request.apply(wrapped, __spreadArray([], __read(deps)));
         }
-        return function () {
-            mounted = false;
-        };
     }, deps);
+    React.useEffect(function () { return function () {
+        mounted = false;
+    }; }, []);
     return wrapped;
 }
 exports.useWrapRequest = useWrapRequest;
