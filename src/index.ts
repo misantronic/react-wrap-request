@@ -11,7 +11,7 @@ export interface ReactWrapRequestOptions<Y, T> {
 }
 
 export function useWrapRequest<T, Y extends ToupleArray>(
-    req: (...deps: Y) => Promise<T>,
+    req: (...deps: Y) => T | Promise<T>,
     options: ReactWrapRequestOptions<Y, T> = {}
 ) {
     let mounted = true;
