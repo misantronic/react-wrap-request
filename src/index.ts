@@ -14,7 +14,8 @@ export function useWrapRequest<T, Y extends ToupleArray>(
     req: (...deps: Y) => T | Promise<T>,
     options: ReactWrapRequestOptions<Y, T> = {}
 ) {
-    let mounted = true;
+    const mountedRef = React.useRef(true);
+    const mounted = mountedRef.current;
     const [, setResult] = React.useState<T>();
     const [, setState] = React.useState<string | Error>();
     const { deps: orgDeps, ...wrapRequestOptions } = options;
@@ -61,7 +62,7 @@ export function useWrapRequest<T, Y extends ToupleArray>(
 
     React.useEffect(
         () => () => {
-            mounted = false;
+            mountedRef.current = false;
         },
         []
     );

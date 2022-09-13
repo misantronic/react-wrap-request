@@ -93,7 +93,8 @@ var wrap_request_1 = require("wrap-request");
 function useWrapRequest(req, options) {
     var _this = this;
     if (options === void 0) { options = {}; }
-    var mounted = true;
+    var mountedRef = React.useRef(true);
+    var mounted = mountedRef.current;
     var _a = __read(React.useState(), 2), setResult = _a[1];
     var _b = __read(React.useState(), 2), setState = _b[1];
     var orgDeps = options.deps, wrapRequestOptions = __rest(options, ["deps"]);
@@ -145,7 +146,7 @@ function useWrapRequest(req, options) {
         }
     }, deps);
     React.useEffect(function () { return function () {
-        mounted = false;
+        mountedRef.current = false;
     }; }, []);
     return wrapped;
 }
