@@ -39,7 +39,7 @@ test('it should manually request', async () => {
     const { result } = renderHook(() => useWrapRequest(async () => 'abc'));
 
     await act(async () => {
-        await result.current.request();
+        await result.current.request([]);
     });
 
     expect(result.current.$).toBe('abc');
@@ -114,10 +114,24 @@ test('it should request with param', async () => {
     );
 
     await act(async () => {
-        await result.current.request(100);
+        await result.current.request([100]);
     });
 
     expect(result.current.$).toBe('/path/to/100');
+});
+
+test('it should request with multiple params', async () => {
+    const { result } = renderHook(() =>
+        useWrapRequest(
+            async (id: number, token: string) => `/path/to/${id}/${token}`
+        )
+    );
+
+    await act(async () => {
+        await result.current.request([100, 'token']);
+    });
+
+    expect(result.current.$).toBe('/path/to/100/token');
 });
 
 test('it should transform', async () => {
@@ -136,7 +150,7 @@ test('it should transform', async () => {
     );
 
     await act(async () => {
-        await result.current.request();
+        await result.current.request([]);
     });
 
     expect(result.current.source?.[1]).toEqual({ id: 500 });

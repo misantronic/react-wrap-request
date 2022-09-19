@@ -102,35 +102,29 @@ function useWrapRequest(req, options) {
     var wrapped = React.useMemo(function () {
         var wrapRequestFn = options.wrapRequestFn || wrap_request_1.wrapRequest;
         // @ts-ignore
-        var wr = wrapRequestFn(function () {
-            var deps = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                deps[_i] = arguments[_i];
-            }
-            return __awaiter(_this, void 0, void 0, function () {
-                var res, e_1;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            _a.trys.push([0, 2, , 3]);
-                            return [4 /*yield*/, req.apply(void 0, __spreadArray([], __read(deps)))];
-                        case 1:
-                            res = _a.sent();
-                            if (mounted) {
-                                setResult(res);
-                            }
-                            return [2 /*return*/, res];
-                        case 2:
-                            e_1 = _a.sent();
-                            if (mounted) {
-                                setState(e_1);
-                            }
-                            throw e_1;
-                        case 3: return [2 /*return*/];
-                    }
-                });
+        var wr = wrapRequestFn(function (deps) { return __awaiter(_this, void 0, void 0, function () {
+            var res, e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, req.apply(void 0, __spreadArray([], __read(deps)))];
+                    case 1:
+                        res = _a.sent();
+                        if (mounted) {
+                            setResult(res);
+                        }
+                        return [2 /*return*/, res];
+                    case 2:
+                        e_1 = _a.sent();
+                        if (mounted) {
+                            setState(e_1);
+                        }
+                        throw e_1;
+                    case 3: return [2 /*return*/];
+                }
             });
-        }, wrapRequestOptions);
+        }); }, wrapRequestOptions);
         wr.match({
             default: function () { return mounted && setState('default'); },
             empty: function () { return mounted && setState('empty'); },
@@ -142,7 +136,8 @@ function useWrapRequest(req, options) {
     }, []);
     React.useEffect(function () {
         if (mounted && (orgDeps === null || orgDeps === void 0 ? void 0 : orgDeps.every(function (dep) { return dep !== undefined; }))) {
-            wrapped.request.apply(wrapped, __spreadArray([], __read(deps)));
+            // @ts-ignore
+            wrapped.request(deps);
         }
     }, deps);
     React.useEffect(function () { return function () {

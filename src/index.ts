@@ -25,7 +25,7 @@ export function useWrapRequest<T, Y extends ToupleArray>(
         const wrapRequestFn = options.wrapRequestFn || wrapRequest;
 
         // @ts-ignore
-        const wr = wrapRequestFn(async (...deps: Y) => {
+        const wr = wrapRequestFn(async (deps: Y) => {
             try {
                 const res = await req(...deps);
 
@@ -56,7 +56,8 @@ export function useWrapRequest<T, Y extends ToupleArray>(
 
     React.useEffect(() => {
         if (mounted && orgDeps?.every((dep) => dep !== undefined)) {
-            wrapped.request(...(deps as any));
+            // @ts-ignore
+            wrapped.request(deps);
         }
     }, deps);
 

@@ -37,7 +37,7 @@ function Component(props) {
     });
 
     useEffect(() => {
-        wrapRequest.request(100);
+        wrapRequest.request([100]);
     }, []);
 
     return <div>{wrapRequest.items.map((item) => item.id)}</div>;
