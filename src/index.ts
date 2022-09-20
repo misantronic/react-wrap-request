@@ -24,7 +24,6 @@ export function useWrapRequest<T, Y extends ToupleArray>(
     const wrapped = React.useMemo(() => {
         const wrapRequestFn = options.wrapRequestFn || wrapRequest;
 
-        // @ts-ignore
         const wr = wrapRequestFn(async (deps: Y) => {
             try {
                 const res = await req(...deps);

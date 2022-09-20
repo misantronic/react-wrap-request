@@ -59,6 +59,69 @@ test('it should have default values', async () => {
     expect(result.current.error).toBe(undefined);
 });
 
+test('it should match', async () => {
+    const { result, waitForNextUpdate } = renderHook(() =>
+        useWrapRequest(async () => 'abc', { deps: [] })
+    );
+
+    const getMatched = () =>
+        result.current.match({
+            loading: () => 'loading',
+            empty: () => 'empty',
+            error: (e) => e.message,
+            fetched: (data) => data,
+        });
+
+    expect(getMatched()).toBe('loading');
+
+    await waitForNextUpdate();
+
+    expect(getMatched()).toBe('abc');
+});
+
+test('it should match error', async () => {
+    const { result, waitForNextUpdate } = renderHook(() =>
+        useWrapRequest(
+            async () => {
+                throw new Error('error');
+            },
+            { deps: [] }
+        )
+    );
+
+    const getMatched = () =>
+        result.current.match({
+            loading: () => 'loading',
+            error: (e) => e.message,
+            empty: () => 'empty',
+        });
+
+    expect(getMatched()).toBe('loading');
+
+    await waitForNextUpdate();
+
+    expect(getMatched()).toBe('error');
+});
+
+test('it should match empty', async () => {
+    const { result, waitForNextUpdate } = renderHook(() =>
+        useWrapRequest(async () => '', { deps: [] })
+    );
+
+    const getMatched = () =>
+        result.current.match({
+            loading: () => 'loading',
+            error: (e) => e.message,
+            empty: () => 'empty',
+        });
+
+    expect(getMatched()).toBe('loading');
+
+    await waitForNextUpdate();
+
+    expect(getMatched()).toBe('empty');
+});
+
 test('it should request when deps change', async () => {
     function useHookWrapper() {
         const [value, setValue] = useState(0);
