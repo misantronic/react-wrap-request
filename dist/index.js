@@ -101,7 +101,6 @@ function useWrapRequest(req, options) {
     var deps = (orgDeps || []);
     var wrapped = React.useMemo(function () {
         var wrapRequestFn = options.wrapRequestFn || wrap_request_1.wrapRequest;
-        // @ts-ignore
         var wr = wrapRequestFn(function (deps) { return __awaiter(_this, void 0, void 0, function () {
             var res, e_1;
             return __generator(this, function (_a) {
