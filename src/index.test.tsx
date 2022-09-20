@@ -66,6 +66,7 @@ test('it should match', async () => {
 
     const getMatched = () =>
         result.current.match({
+            default: () => 'default',
             loading: () => 'loading',
             empty: () => 'empty',
             error: (e) => e.message,
@@ -91,6 +92,7 @@ test('it should match error', async () => {
 
     const getMatched = () =>
         result.current.match({
+            default: () => 'default',
             loading: () => 'loading',
             error: (e) => e.message,
             empty: () => 'empty',
@@ -110,6 +112,7 @@ test('it should match empty', async () => {
 
     const getMatched = () =>
         result.current.match({
+            default: () => 'default',
             loading: () => 'loading',
             error: (e) => e.message,
             empty: () => 'empty',
