@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { wrapRequest } from 'wrap-request';
+import { WrapRequest, wrapRequest } from 'wrap-request';
 
 type ToupleArray = ReadonlyArray<any> | readonly [any];
 
@@ -10,10 +10,18 @@ export interface ReactWrapRequestOptions<Y, T> {
     wrapRequestFn?: typeof wrapRequest;
 }
 
+export function useWrapRequest<T, Y = undefined>(
+    req: () => T | Promise<T>,
+    options?: ReactWrapRequestOptions<Y, T>
+): WrapRequest<T, Y, T>;
+export function useWrapRequest<T, Y extends ToupleArray>(
+    req: (...deps: Y) => T | Promise<T>,
+    options?: ReactWrapRequestOptions<Y, T>
+): WrapRequest<T, Y, T>;
 export function useWrapRequest<T, Y extends ToupleArray>(
     req: (...deps: Y) => T | Promise<T>,
     options: ReactWrapRequestOptions<Y, T> = {}
-) {
+): WrapRequest<T, Y, T> {
     const mountedRef = React.useRef(true);
     const mounted = mountedRef.current;
     const [, setResult] = React.useState<T>();
