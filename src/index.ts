@@ -26,7 +26,7 @@ export function useWrapRequest<T, Y extends ToupleArray>(
 
         const wr = wrapRequestFn(async (deps: Y) => {
             try {
-                const res = await req(...deps);
+                const res = await req(...(deps || []));
 
                 if (mounted) {
                     setResult(res);

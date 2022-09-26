@@ -107,7 +107,7 @@ function useWrapRequest(req, options) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, req.apply(void 0, __spreadArray([], __read(deps)))];
+                        return [4 /*yield*/, req.apply(void 0, __spreadArray([], __read((deps || []))))];
                     case 1:
                         res = _a.sent();
                         if (mounted) {
