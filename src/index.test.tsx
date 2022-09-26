@@ -39,7 +39,7 @@ test('it should manually request', async () => {
     const { result } = renderHook(() => useWrapRequest(async () => 'abc'));
 
     await act(async () => {
-        await result.current.request();
+        await result.current.request([]);
     });
 
     expect(result.current.$).toBe('abc');
@@ -216,7 +216,7 @@ test('it should transform', async () => {
     );
 
     await act(async () => {
-        await result.current.request();
+        await result.current.request([]);
     });
 
     expect(result.current.source?.[1]).toEqual({ id: 500 });
