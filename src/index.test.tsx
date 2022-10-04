@@ -22,6 +22,30 @@ test('it should not request when deps-value are undefined', async () => {
     expect(result.current.error).toBe(undefined);
 });
 
+test('it should manual request with empty deps', async () => {
+    const { result } = renderHook(() =>
+        useWrapRequest(async () => true, { deps: [] })
+    );
+
+    await act(async () => {
+        await result.current.request();
+    });
+
+    expect(result.current.$).toBe(true);
+});
+
+test('it should manual request with filles deps', async () => {
+    const { result } = renderHook(() =>
+        useWrapRequest(async (token) => token, { deps: ['token'] })
+    );
+
+    await act(async () => {
+        await result.current.request(['new_token']);
+    });
+
+    expect(result.current.$).toBe('new_token');
+});
+
 test('it should initially request', async () => {
     const { result, waitForNextUpdate } = renderHook(() =>
         useWrapRequest(async () => 'abc', { deps: [] })

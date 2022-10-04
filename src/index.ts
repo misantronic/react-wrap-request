@@ -10,14 +10,13 @@ export interface ReactWrapRequestOptions<Y, T> {
     wrapRequestFn?: typeof wrapRequest;
 }
 
-export function useWrapRequest<T>(
-    req: () => T | Promise<T>,
-    options?: ReactWrapRequestOptions<undefined, T>
-): WrapRequest<T, undefined>;
+type UnArray<T> = T extends Array<infer U> ? U : T;
+type EmptyArray<P> = UnArray<P> extends undefined ? undefined : P;
+
 export function useWrapRequest<T, Y extends ToupleArray>(
     req: (...deps: Y) => T | Promise<T>,
     options?: ReactWrapRequestOptions<Y, T>
-): WrapRequest<T, Y>;
+): WrapRequest<T, EmptyArray<Y>>;
 export function useWrapRequest<T, Y extends ToupleArray>(
     req: (...deps: Y) => T | Promise<T>,
     options: ReactWrapRequestOptions<Y, T> = {}
