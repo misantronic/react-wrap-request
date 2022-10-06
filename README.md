@@ -46,7 +46,7 @@ function Component(props) {
 
 ## transform request
 
-see https://github.com/misantronic/wrap-request#pipe--transform
+see https://github.com/misantronic/wrap-request#pipe
 
 ```jsx
 function Component() {
