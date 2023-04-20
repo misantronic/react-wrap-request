@@ -3,9 +3,9 @@ import { WrapRequest, wrapRequest } from 'wrap-request';
 
 type ToupleArray = ReadonlyArray<any> | readonly [any];
 
-export interface ReactWrapRequestOptions<Y, T> {
+export interface ReactWrapRequestOptions<Y, DD> {
     deps?: Y;
-    defaultData?: T;
+    defaultData?: DD;
     cacheKey?: string;
     wrapRequestFn?: typeof wrapRequest;
 }
@@ -13,14 +13,15 @@ export interface ReactWrapRequestOptions<Y, T> {
 type UnArray<T> = T extends Array<infer U> ? U : T;
 type EmptyArray<P> = UnArray<P> extends undefined ? undefined : P;
 
-export function useWrapRequest<T, Y extends ToupleArray>(
+export function useWrapRequest<T, Y extends ToupleArray, DD = undefined>(
     req: (...deps: Y) => T | Promise<T>,
-    options?: ReactWrapRequestOptions<Y, T>
-): WrapRequest<T, EmptyArray<Y>>;
-export function useWrapRequest<T, Y extends ToupleArray>(
+    options?: ReactWrapRequestOptions<Y, DD>
+): WrapRequest<T, EmptyArray<Y>, T, any, DD>;
+
+export function useWrapRequest<T, Y extends ToupleArray, DD = undefined>(
     req: (...deps: Y) => T | Promise<T>,
-    options: ReactWrapRequestOptions<Y, T> = {}
-): WrapRequest<T, Y> {
+    options: ReactWrapRequestOptions<Y, DD> = {}
+): WrapRequest<T, Y, T, any, DD> {
     const mountedRef = React.useRef(true);
     const mounted = mountedRef.current;
     const [, setResult] = React.useState<T>();

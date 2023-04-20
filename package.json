@@ -23,7 +23,7 @@
     "homepage": "https://github.com/misantronic/react-wrap-request#readme",
     "peerDependencies": {
         "react": ">= 16.8.0",
-        "wrap-request": ">= 6"
+        "wrap-request": ">= 7"
     },
     "devDependencies": {
         "@testing-library/react-hooks": "^3.2.1",
@@ -34,7 +34,7 @@
         "react-test-renderer": "^17.0.2",
         "ts-jest": "^25.2.1",
         "typescript": "^4.2.3",
-        "wrap-request": "^6.0.0"
+        "wrap-request": "^7.0.0"
     },
     "jest": {
         "watchPathIgnorePatterns": [
