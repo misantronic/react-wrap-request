@@ -8,5 +8,5 @@ export interface ReactWrapRequestOptions<Y, DD> {
 }
 type UnArray<T> = T extends Array<infer U> ? U : T;
 type EmptyArray<P> = UnArray<P> extends undefined ? undefined : P;
-export declare function useWrapRequest<T, Y extends ToupleArray, DD = undefined>(req: (...deps: Y) => T | Promise<T>, options?: ReactWrapRequestOptions<Y, DD>): WrapRequest<T, EmptyArray<Y>, T, any, DD>;
+export declare function useWrapRequest<T, Y extends ToupleArray, DD extends T | undefined = undefined>(req: (...deps: Y) => T | Promise<T>, options?: ReactWrapRequestOptions<Y, DD>): WrapRequest<T, EmptyArray<Y>, T, any, DD>;
 export {};
