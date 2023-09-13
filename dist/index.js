@@ -147,9 +147,12 @@ function useWrapRequest(req, options) {
             wrapped.request(deps);
         }
     }, deps);
-    React.useEffect(function () { return function () {
-        mountedRef.current = false;
-    }; }, []);
+    React.useEffect(function () {
+        mountedRef.current = true;
+        return function () {
+            mountedRef.current = false;
+        };
+    }, []);
     return wrapped;
 }
 exports.useWrapRequest = useWrapRequest;
