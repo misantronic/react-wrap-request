@@ -76,12 +76,13 @@ export function useWrapRequest<
         }
     }, deps);
 
-    React.useEffect(
-        () => () => {
+    React.useEffect(() => {
+        mountedRef.current = true;
+
+        return () => {
             mountedRef.current = false;
-        },
-        []
-    );
+        };
+    }, []);
 
     return wrapped;
 }
