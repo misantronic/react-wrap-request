@@ -31,7 +31,6 @@ export function useWrapRequest<
     options: ReactWrapRequestOptions<Y, DD> = {}
 ): WrapRequest<T, Y, T, any, DD> {
     const mountedRef = React.useRef(true);
-    const mounted = mountedRef.current;
     const [, setResult] = React.useState<T>();
     const [, setState] = React.useState<string | Error>();
     const { deps: orgDeps, ...wrapRequestOptions } = options;
@@ -44,13 +43,13 @@ export function useWrapRequest<
             try {
                 const res = await req(...(deps || []));
 
-                if (mounted) {
+                if (mountedRef.current) {
                     setResult(res);
                 }
 
                 return res;
             } catch (e) {
-                if (mounted) {
+                if (mountedRef.current) {
                     setState(e as Error);
                 }
 
@@ -59,18 +58,18 @@ export function useWrapRequest<
         }, wrapRequestOptions);
 
         wr.match({
-            default: () => mounted && setState('default'),
-            empty: () => mounted && setState('empty'),
-            error: (e) => mounted && setState(e),
-            fetched: () => mounted && setState('fetched'),
-            loading: () => mounted && setState('loading'),
+            default: () => mountedRef.current && setState('default'),
+            empty: () => mountedRef.current && setState('empty'),
+            error: (e) => mountedRef.current && setState(e),
+            fetched: () => mountedRef.current && setState('fetched'),
+            loading: () => mountedRef.current && setState('loading'),
         });
 
         return wr;
     }, []);
 
     React.useEffect(() => {
-        if (mounted && orgDeps?.every((dep) => dep !== undefined)) {
+        if (mountedRef.current && orgDeps?.every((dep) => dep !== undefined)) {
             // @ts-ignore
             wrapped.request(deps);
         }

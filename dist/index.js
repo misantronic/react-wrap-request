@@ -102,7 +102,6 @@ function useWrapRequest(req, options) {
     var _this = this;
     if (options === void 0) { options = {}; }
     var mountedRef = React.useRef(true);
-    var mounted = mountedRef.current;
     var _a = __read(React.useState(), 2), setResult = _a[1];
     var _b = __read(React.useState(), 2), setState = _b[1];
     var orgDeps = options.deps, wrapRequestOptions = __rest(options, ["deps"]);
@@ -118,13 +117,13 @@ function useWrapRequest(req, options) {
                         return [4 /*yield*/, req.apply(void 0, __spreadArray([], __read((deps || [])), false))];
                     case 1:
                         res = _a.sent();
-                        if (mounted) {
+                        if (mountedRef.current) {
                             setResult(res);
                         }
                         return [2 /*return*/, res];
                     case 2:
                         e_1 = _a.sent();
-                        if (mounted) {
+                        if (mountedRef.current) {
                             setState(e_1);
                         }
                         throw e_1;
@@ -133,16 +132,16 @@ function useWrapRequest(req, options) {
             });
         }); }, wrapRequestOptions);
         wr.match({
-            default: function () { return mounted && setState('default'); },
-            empty: function () { return mounted && setState('empty'); },
-            error: function (e) { return mounted && setState(e); },
-            fetched: function () { return mounted && setState('fetched'); },
-            loading: function () { return mounted && setState('loading'); },
+            default: function () { return mountedRef.current && setState('default'); },
+            empty: function () { return mountedRef.current && setState('empty'); },
+            error: function (e) { return mountedRef.current && setState(e); },
+            fetched: function () { return mountedRef.current && setState('fetched'); },
+            loading: function () { return mountedRef.current && setState('loading'); },
         });
         return wr;
     }, []);
     React.useEffect(function () {
-        if (mounted && (orgDeps === null || orgDeps === void 0 ? void 0 : orgDeps.every(function (dep) { return dep !== undefined; }))) {
+        if (mountedRef.current && (orgDeps === null || orgDeps === void 0 ? void 0 : orgDeps.every(function (dep) { return dep !== undefined; }))) {
             // @ts-ignore
             wrapped.request(deps);
         }
