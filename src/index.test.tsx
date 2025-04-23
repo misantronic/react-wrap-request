@@ -269,3 +269,18 @@ test('it should transform with default data', async () => {
     expect(result.current.source[1]).toEqual({ id: 500 });
     expect(result.current.$[1]).toEqual({ doubleId: 1000 });
 });
+
+test('it should store metadata', async () => {
+    const { result } = renderHook(() =>
+        useWrapRequest(() => [{ id: 1 }], {
+            metadata: (data) => data[0].id,
+            defaultData: [],
+        })
+    );
+
+    await act(async () => {
+        await result.current.request();
+    });
+
+    expect(result.current.metadata).toEqual(1);
+});

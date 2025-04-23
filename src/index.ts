@@ -3,9 +3,10 @@ import { WrapRequest, wrapRequest } from 'wrap-request';
 
 type ToupleArray = ReadonlyArray<any> | readonly [any];
 
-export interface ReactWrapRequestOptions<Y, DD> {
+export interface ReactWrapRequestOptions<T, Y, DD, MD> {
     deps?: Y;
     defaultData?: DD;
+    metadata?: ($: T) => MD;
     cacheKey?: string;
     wrapRequestFn?: typeof wrapRequest;
 }
@@ -16,19 +17,21 @@ type EmptyArray<P> = UnArray<P> extends undefined ? undefined : P;
 export function useWrapRequest<
     T,
     Y extends ToupleArray,
-    DD extends T | undefined = undefined
+    DD extends T | undefined = undefined,
+    MD = any
 >(
     req: (...deps: Y) => T | Promise<T>,
-    options?: ReactWrapRequestOptions<Y, DD>
-): WrapRequest<T, EmptyArray<Y>, T, any, DD>;
+    options?: ReactWrapRequestOptions<T, Y, DD, MD>
+): WrapRequest<T, EmptyArray<Y>, T, MD, DD>;
 
 export function useWrapRequest<
     T,
     Y extends ToupleArray,
-    DD extends T | undefined = undefined
+    DD extends T | undefined = undefined,
+    MD = any
 >(
     req: (...deps: Y) => T | Promise<T>,
-    options: ReactWrapRequestOptions<Y, DD> = {}
+    options: ReactWrapRequestOptions<T, Y, DD, MD> = {}
 ): WrapRequest<T, Y, T, any, DD> {
     const mountedRef = React.useRef(true);
     const [, setResult] = React.useState<T>();
